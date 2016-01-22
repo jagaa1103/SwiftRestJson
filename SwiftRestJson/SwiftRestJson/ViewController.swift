@@ -10,7 +10,7 @@ import UIKit
 import SwiftyJSON
 import Alamofire
 
-class ViewController: UIViewController {
+class ViewController: UIViewController{
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,15 +26,26 @@ class ViewController: UIViewController {
     func fromServer(){
         Alamofire.request(.GET, "http://jsonplaceholder.typicode.com/posts")
             .responseJSON { response in
-                print(response.request)  // original URL request
-                print(response.response) // URL response
-                print(response.data)     // server data
-                print(response.result)   // result of response serialization
+//                print(response.request)  // original URL request
+//                print(response.response) // URL response
+//                print(response.data)     // server data
+//                print(response.result.value!)   // result of response serialization
                 
-                if let JSON = response.result.value {
-                    print("JSON: \(JSON)")
+                if let resJSON = response.result.value {
+                    self.parseJSON(resJSON)
+//                    let json = JSON(resJSON)
+//                    print(json)
                 }
         }
+    }
+    
+    func parseJSON(temp_data:AnyObject){
+        let json = JSON(temp_data)
+//        print(json)
+        for (index,subJson):(String, JSON) in json {
+                print(subJson["title"])
+        }
+        
     }
 }
 
