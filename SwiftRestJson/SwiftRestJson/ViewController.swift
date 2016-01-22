@@ -15,6 +15,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        fromServer()
     }
 
     override func didReceiveMemoryWarning() {
@@ -23,7 +24,7 @@ class ViewController: UIViewController {
     }
 
     func fromServer(){
-        Alamofire.request(.GET, "http://jsonplaceholder.typicode.com")
+        Alamofire.request(.GET, "http://jsonplaceholder.typicode.com/posts")
             .responseJSON { response in
                 print(response.request)  // original URL request
                 print(response.response) // URL response
