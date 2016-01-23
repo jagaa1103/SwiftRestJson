@@ -10,11 +10,17 @@ import UIKit
 import SwiftyJSON
 import Alamofire
 
-class ViewController: UIViewController{
+class tableViewController: UITableViewController{
 
+    var listItems = [String]()
+    
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        activityIndicator.startAnimating()
         fromServer()
     }
 
@@ -23,6 +29,18 @@ class ViewController: UIViewController{
         // Dispose of any resources that can be recreated.
     }
 
+    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return listItems.count
+    }
+    
+    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCellWithIdentifier("Cell")! as UITableViewCell
+        let item = listItems[indexPath.row]
+        cell.textLabel?.text = item
+        
+        return cell
+    }
+    
     func fromServer(){
         Alamofire.request(.GET, "http://jsonplaceholder.typicode.com/posts")
             .responseJSON { response in
@@ -39,13 +57,18 @@ class ViewController: UIViewController{
         }
     }
     
+
     func parseJSON(temp_data:AnyObject){
+        listItems = [String]()
         let json = JSON(temp_data)
 //        print(json)
         for (index,subJson):(String, JSON) in json {
                 print(subJson["title"])
+//                let title = subJson["title"] as! String
+                listItems.append("\(subJson["title"])")
         }
-        
+        self.tableView.reloadData()
+        activityIndicator.stopAnimating()
     }
 }
 
